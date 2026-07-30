@@ -1,16 +1,37 @@
 import { useLocalStorage } from "./useLocalStorage";
 import { useMemo } from "react";
 
+/** Returns local date as YYYY-MM-DD (not UTC). Fixes the midnight timezone bug. */
+export function getLocalDateStr(date: Date = new Date()): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
+export interface Attachment {
+  id: string;
+  type: "link" | "file";
+  name: string;
+  url?: string;      // for links
+  data?: string;     // base64 for files
+  mimeType?: string;
+  size?: number;     // bytes
+}
+
 export interface Session {
   id: string;
   subject: string;
-  date: string; // YYYY-MM-DD
-  timeStart: string; // HH:MM
-  timeEnd: string; // HH:MM
+  date: string; // YYYY-MM-DD (LOCAL date)
+  timeStart: string;
+  timeEnd: string;
   hours: number;
   goalTopic: string;
   remarks: string;
   mood?: number; // 1-5
+  tags?: string[];
+  difficulty?: "Easy" | "Medium" | "Hard" | "Expert";
+  attachments?: Attachment[];
 }
 
 export interface Goal {
@@ -21,16 +42,26 @@ export interface Goal {
   createdAt: string;
 }
 
+export interface Profile {
+  name: string;
+  bio: string;
+  avatar: string; // emoji
+}
+
 export interface Settings {
   theme: "dark" | "light";
   weeklyGoalHours: number;
   customSubjects: string[];
+  profile: Profile;
+  customTags: string[];
 }
 
 const defaultSettings: Settings = {
   theme: "dark",
   weeklyGoalHours: 20,
   customSubjects: [],
+  profile: { name: "", bio: "", avatar: "📚" },
+  customTags: [],
 };
 
 export function useSessions() {
@@ -40,10 +71,7 @@ export function useSessions() {
   );
 
   const addSession = (session: Omit<Session, "id">) => {
-    const newSession: Session = {
-      ...session,
-      id: crypto.randomUUID(),
-    };
+    const newSession: Session = { ...session, id: crypto.randomUUID() };
     setSessions((prev) => [...prev, newSession]);
     return newSession;
   };
@@ -90,53 +118,53 @@ export function useSettings() {
     setSettings((prev) => ({ ...prev, ...updates }));
   };
 
-  return { settings, updateSettings };
+  // Migrate older stored settings that may lack new fields
+  const mergedSettings: Settings = {
+    ...defaultSettings,
+    ...settings,
+    profile: { ...defaultSettings.profile, ...(settings.profile ?? {}) },
+    customTags: settings.customTags ?? [],
+  };
+
+  return { settings: mergedSettings, updateSettings };
 }
 
 export function useStats(sessions: Session[]) {
   return useMemo(() => {
-    const today = new Date().toISOString().split("T")[0];
+    const today = getLocalDateStr();
     const todaySessions = sessions.filter((s) => s.date === today);
     const todayHours = todaySessions.reduce((sum, s) => sum + s.hours, 0);
 
-    // Calculate current streak
+    // Streak: count consecutive days ending today (local dates)
+    const sortedDates = Array.from(new Set(sessions.map((s) => s.date))).sort(
+      (a, b) => b.localeCompare(a)
+    );
     let streak = 0;
-    const sortedDates = Array.from(
-      new Set(sessions.map((s) => s.date))
-    ).sort((a, b) => b.localeCompare(a));
-
-    let checkDate = new Date();
-    for (const dateStr of sortedDates) {
-      const sessionDate = new Date(dateStr + "T00:00:00");
-      const daysDiff = Math.floor(
-        (checkDate.getTime() - sessionDate.getTime()) / (1000 * 60 * 60 * 24)
-      );
-
-      if (daysDiff === streak || (streak === 0 && daysDiff === 0)) {
+    for (let i = 0; i < sortedDates.length; i++) {
+      const expected = new Date();
+      expected.setDate(expected.getDate() - i);
+      if (sortedDates[i] === getLocalDateStr(expected)) {
         streak++;
-        checkDate = sessionDate;
       } else {
         break;
       }
     }
 
-    // Weekly goal progress
-    const weekStart = new Date();
-    weekStart.setDate(weekStart.getDate() - weekStart.getDay());
-    const weekStartStr = weekStart.toISOString().split("T")[0];
-
+    // Weekly goal (week starts Sunday)
+    const now = new Date();
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - now.getDay());
+    const weekStartStr = getLocalDateStr(weekStart);
     const weekSessions = sessions.filter((s) => s.date >= weekStartStr);
     const weekHours = weekSessions.reduce((sum, s) => sum + s.hours, 0);
 
-    // Monthly completion rate
-    const monthStart = new Date();
-    monthStart.setDate(1);
-    const monthStartStr = monthStart.toISOString().split("T")[0];
-
+    // Monthly completion
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const monthStartStr = getLocalDateStr(monthStart);
     const monthSessions = sessions.filter((s) => s.date >= monthStartStr);
     const daysInMonth = new Date(
-      monthStart.getFullYear(),
-      monthStart.getMonth() + 1,
+      now.getFullYear(),
+      now.getMonth() + 1,
       0
     ).getDate();
     const daysWithSessions = new Set(monthSessions.map((s) => s.date)).size;
@@ -144,11 +172,6 @@ export function useStats(sessions: Session[]) {
       (daysWithSessions / daysInMonth) * 100
     );
 
-    return {
-      todayHours,
-      streak,
-      weekHours,
-      monthCompletionRate,
-    };
+    return { todayHours, streak, weekHours, monthCompletionRate };
   }, [sessions]);
 }
