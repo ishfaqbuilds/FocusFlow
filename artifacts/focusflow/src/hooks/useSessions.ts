@@ -69,6 +69,10 @@ export function useSessions() {
     "focusflow_sessions",
     []
   );
+  const [trash, setTrash] = useLocalStorage<Session[]>(
+    "focusflow_trash",
+    []
+  );
 
   const addSession = (session: Omit<Session, "id">) => {
     const newSession: Session = { ...session, id: crypto.randomUUID() };
@@ -76,9 +80,31 @@ export function useSessions() {
     return newSession;
   };
 
+  /** Moves a session to trash (soft delete) */
   const deleteSession = (id: string) => {
-    setSessions((prev) => prev.filter((s) => s.id !== id));
+    setSessions((prev) => {
+      const target = prev.find((s) => s.id === id);
+      if (target) setTrash((t) => [target, ...t]);
+      return prev.filter((s) => s.id !== id);
+    });
   };
+
+  /** Permanently delete from trash */
+  const permanentlyDelete = (id: string) => {
+    setTrash((prev) => prev.filter((s) => s.id !== id));
+  };
+
+  /** Restore from trash back to sessions */
+  const restoreSession = (id: string) => {
+    setTrash((prev) => {
+      const target = prev.find((s) => s.id === id);
+      if (target) setSessions((s) => [...s, target]);
+      return prev.filter((s) => s.id !== id);
+    });
+  };
+
+  /** Permanently clear all trash */
+  const emptyTrash = () => setTrash([]);
 
   const updateSession = (id: string, updates: Partial<Session>) => {
     setSessions((prev) =>
@@ -86,7 +112,17 @@ export function useSessions() {
     );
   };
 
-  return { sessions, addSession, deleteSession, updateSession, setSessions };
+  return {
+    sessions,
+    addSession,
+    deleteSession,
+    updateSession,
+    setSessions,
+    trash,
+    restoreSession,
+    permanentlyDelete,
+    emptyTrash,
+  };
 }
 
 export function useGoals() {

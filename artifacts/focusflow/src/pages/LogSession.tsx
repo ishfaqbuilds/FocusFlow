@@ -290,7 +290,7 @@ export default function LogSession({
               <Input
                 id="hours"
                 type="number"
-                step="0.25"
+                step="any"
                 min="0"
                 value={hours}
                 onChange={(e) => setHours(e.target.value)}
