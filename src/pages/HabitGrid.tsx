@@ -18,6 +18,13 @@ interface HabitGridProps {
 
 type ViewMode = "month" | "week";
 
+const formatLocalDate = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
 export default function HabitGrid({ sessions, settings }: HabitGridProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("month");
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -75,7 +82,7 @@ export default function HabitGrid({ sessions, settings }: HabitGridProps) {
         date.setDate(startOfWeek.getDate() + i);
         return {
           day: date.getDate(),
-          dateStr: date.toISOString().split("T")[0],
+          dateStr: formatLocalDate(date),
         };
       });
     } else {
@@ -148,7 +155,7 @@ export default function HabitGrid({ sessions, settings }: HabitGridProps) {
               <div className="inline-block min-w-full">
                 {/* Day headers */}
                 <div className="flex mb-2">
-                  <div className="w-32 flex-shrink-0" />
+                  <div className="w-48 flex-shrink-0" />
                   <div className="flex gap-1">
                     {days.map(({ day }, index) => (
                       <div
@@ -171,7 +178,7 @@ export default function HabitGrid({ sessions, settings }: HabitGridProps) {
                       transition={{ delay: subjectIndex * 0.05 }}
                       className="flex items-center"
                     >
-                      <div className="w-32 flex-shrink-0 pr-4 text-sm font-medium truncate">
+                      <div className="w-48 flex-shrink-0 pr-4 text-sm font-medium truncate">
                         {subject}
                       </div>
                       <div className="flex gap-1">

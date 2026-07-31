@@ -174,15 +174,26 @@ export function useStats(sessions: Session[]) {
     const todaySessions = sessions.filter((s) => s.date === today);
     const todayHours = todaySessions.reduce((sum, s) => sum + s.hours, 0);
 
-    // Streak: count consecutive days ending today (local dates)
+    // Streak: count consecutive days with sessions
+    // First session = streak 1, consistent days = streak++, break = streak 0
     const sortedDates = Array.from(new Set(sessions.map((s) => s.date))).sort(
       (a, b) => b.localeCompare(a)
     );
+    
+    if (sortedDates.length === 0) {
+      return { todayHours, streak: 0, weekHours, monthCompletionRate };
+    }
+    
     let streak = 0;
+    const mostRecentDate = sortedDates[0];
+    
+    // Start counting from the most recent study day
     for (let i = 0; i < sortedDates.length; i++) {
-      const expected = new Date();
+      const expected = new Date(mostRecentDate);
       expected.setDate(expected.getDate() - i);
-      if (sortedDates[i] === getLocalDateStr(expected)) {
+      const expectedStr = getLocalDateStr(expected);
+      
+      if (sortedDates[i] === expectedStr) {
         streak++;
       } else {
         break;

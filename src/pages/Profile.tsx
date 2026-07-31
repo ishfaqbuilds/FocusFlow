@@ -61,13 +61,22 @@ export default function Profile({ sessions, settings, onUpdateSettings }: Profil
     const uniqueSubjects = new Set(sessions.map((s) => s.subject)).size;
     const uniqueDays = new Set(sessions.map((s) => s.date)).size;
 
-    // Overall streak
+    // Overall streak: count consecutive days with sessions
+    // First session = streak 1, consistent days = streak++, break = streak 0
     const sortedDates = Array.from(new Set(sessions.map((s) => s.date))).sort(
       (a, b) => b.localeCompare(a)
     );
+    
+    if (sortedDates.length === 0) {
+      return { totalHours, totalSessions, uniqueSubjects, uniqueDays, streak: 0 };
+    }
+    
     let streak = 0;
+    const mostRecentDate = sortedDates[0];
+    
+    // Start counting from the most recent study day
     for (let i = 0; i < sortedDates.length; i++) {
-      const expected = new Date();
+      const expected = new Date(mostRecentDate);
       expected.setDate(expected.getDate() - i);
       if (sortedDates[i] === getLocalDateStr(expected)) streak++;
       else break;
@@ -110,16 +119,23 @@ export default function Profile({ sessions, settings, onUpdateSettings }: Profil
       periodLabel = String(now.getFullYear());
     }
 
-    // Streak for filtered set
+    // Streak for filtered set: count consecutive days with sessions
+    // First session = streak 1, consistent days = streak++, break = streak 0
     const sortedDates = Array.from(new Set(filtered.map((s) => s.date))).sort(
       (a, b) => b.localeCompare(a)
     );
+    
     let streak = 0;
-    for (let i = 0; i < sortedDates.length; i++) {
-      const expected = new Date();
-      expected.setDate(expected.getDate() - i);
-      if (sortedDates[i] === getLocalDateStr(expected)) streak++;
-      else break;
+    if (sortedDates.length > 0) {
+      const mostRecentDate = sortedDates[0];
+      
+      // Start counting from the most recent study day
+      for (let i = 0; i < sortedDates.length; i++) {
+        const expected = new Date(mostRecentDate);
+        expected.setDate(expected.getDate() - i);
+        if (sortedDates[i] === getLocalDateStr(expected)) streak++;
+        else break;
+      }
     }
 
     const shareData = {
