@@ -1,5 +1,7 @@
 # FocusFlow - Study Habit Tracker
 
+FocusFlow → Aesthetic Offline First Habit And Study Tracker. Pomodoro, Calendar, Streaks And Goals. Dark Navy And Grass Green. 100% Client Side.
+
 A modern, browser-based study habit tracker built with React, TypeScript, and Tailwind CSS.
 
 ## Features

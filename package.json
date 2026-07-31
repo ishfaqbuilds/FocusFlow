@@ -1,6 +1,7 @@
 {
   "name": "focusflow",
   "version": "1.0.0",
+  "description": "FocusFlow → Aesthetic Offline First Habit And Study Tracker. Pomodoro, Calendar, Streaks And Goals. Dark Navy And Grass Green. 100% Client Side.",
   "private": true,
   "type": "module",
   "scripts": {
