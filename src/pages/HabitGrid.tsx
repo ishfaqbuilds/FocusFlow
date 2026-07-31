@@ -145,7 +145,7 @@ export default function HabitGrid({ sessions, settings }: HabitGridProps) {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <div className="inline-block min-w-full">
+              <div className="inline-block min-w-full pl-8">
                 {/* Day headers */}
                 <div className="flex mb-2">
                   <div className="w-40 flex-shrink-0" />
@@ -171,7 +171,7 @@ export default function HabitGrid({ sessions, settings }: HabitGridProps) {
                       transition={{ delay: subjectIndex * 0.05 }}
                       className="flex items-center"
                     >
-                      <div className="w-40 flex-shrink-0 pr-4 text-sm font-medium">
+                      <div className="w-32 flex-shrink-0 pr-4 text-sm font-medium">
                         {subject}
                       </div>
                       <div className="flex gap-1">
