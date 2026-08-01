@@ -127,6 +127,7 @@
   --app-font-serif: Georgia, serif;
   --app-font-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
   --app-font-script: 'Dancing Script', cursive;
+  --app-font-display: 'Playfair Display', serif;
   --app-font-script: 'Dancing Script', cursive;
   --radius: 0.75rem;
   --shadow-2xs: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
@@ -271,6 +272,7 @@
   --app-font-serif: Georgia, serif;
   --app-font-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
   --app-font-script: 'Dancing Script', cursive;
+  --app-font-display: 'Playfair Display', serif;
 }
 
 @layer base {
@@ -295,6 +297,19 @@
 
   .font-dancing-script {
     font-family: 'Dancing Script', cursive;
+  }
+
+  .font-playfair-display {
+    font-family: 'Playfair Display', serif;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }
 

@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/tooltip";
 import type { Session, Settings } from "@/hooks/useSessions";
 import { formatTime } from "@/lib/utils";
-import { Grid3x3, Calendar } from "lucide-react";
+import { Grid3x3, Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface HabitGridProps {
@@ -72,10 +72,9 @@ export default function HabitGrid({ sessions, settings }: HabitGridProps) {
 
   const getDaysInView = (): { day: number; dateStr: string }[] => {
     if (viewMode === "week") {
-      const today = new Date();
-      const dayOfWeek = today.getDay();
-      const startOfWeek = new Date(today);
-      startOfWeek.setDate(today.getDate() - dayOfWeek);
+      const dayOfWeek = currentDate.getDay();
+      const startOfWeek = new Date(currentDate);
+      startOfWeek.setDate(currentDate.getDate() - dayOfWeek);
 
       return Array.from({ length: 7 }).map((_, i) => {
         const date = new Date(startOfWeek);
@@ -107,7 +106,28 @@ export default function HabitGrid({ sessions, settings }: HabitGridProps) {
 
   const formatViewTitle = () => {
     if (viewMode === "week") {
-      return "Current Week";
+      const weekStart = new Date(currentDate);
+      const dayOfWeek = weekStart.getDay();
+      weekStart.setDate(currentDate.getDate() - dayOfWeek);
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 6);
+      
+      const formatDate = (date: Date) => {
+        return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      };
+      
+      const isCurrentWeek = () => {
+        const today = new Date();
+        const currentWeekStart = new Date(today);
+        currentWeekStart.setDate(today.getDate() - today.getDay());
+        return weekStart.toDateString() === currentWeekStart.toDateString();
+      };
+      
+      if (isCurrentWeek()) {
+        return "Current Week";
+      }
+      
+      return `${formatDate(weekStart)} - ${formatDate(weekEnd)}`;
     }
     return currentDate.toLocaleDateString("en-US", {
       month: "long",
@@ -115,15 +135,71 @@ export default function HabitGrid({ sessions, settings }: HabitGridProps) {
     });
   };
 
+  const goToPrevious = () => {
+    if (viewMode === "month") {
+      const newDate = new Date(currentDate);
+      newDate.setMonth(newDate.getMonth() - 1);
+      setCurrentDate(newDate);
+    } else {
+      const newDate = new Date(currentDate);
+      newDate.setDate(newDate.getDate() - 7);
+      setCurrentDate(newDate);
+    }
+  };
+
+  const goToNext = () => {
+    if (viewMode === "month") {
+      const newDate = new Date(currentDate);
+      newDate.setMonth(newDate.getMonth() + 1);
+      setCurrentDate(newDate);
+    } else {
+      const newDate = new Date(currentDate);
+      newDate.setDate(newDate.getDate() + 7);
+      setCurrentDate(newDate);
+    }
+  };
+
+  const goToToday = () => {
+    setCurrentDate(new Date());
+  };
+
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between flex-wrap gap-4">
-            <CardTitle className="text-2xl flex items-center gap-2">
-              <Grid3x3 className="h-6 w-6" />
-              Study Habit Grid - {formatViewTitle()}
-            </CardTitle>
+            <div className="flex items-center gap-2">
+              <CardTitle className="text-2xl flex items-center gap-2">
+                <Grid3x3 className="h-6 w-6" />
+                Study Habit Grid → {formatViewTitle()}
+              </CardTitle>
+              <div className="flex gap-1 ml-4">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={goToPrevious}
+                  className="h-8 w-8 p-0"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={goToToday}
+                  className="h-8 w-16"
+                >
+                  Today
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={goToNext}
+                  className="h-8 w-8 p-0"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
             <div className="flex gap-2">
               <Button
                 variant={viewMode === "week" ? "default" : "outline"}
@@ -151,7 +227,7 @@ export default function HabitGrid({ sessions, settings }: HabitGridProps) {
               <p>No study sessions yet. Start logging to see your habit grid!</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto scrollbar-hide">
               <div className="inline-block min-w-full">
                 {/* Day headers */}
                 <div className="flex mb-2">
@@ -203,9 +279,9 @@ export default function HabitGrid({ sessions, settings }: HabitGridProps) {
                               </TooltipTrigger>
                               {hasData && (
                                 <TooltipContent>
-                                  <div className="space-y-1">
+                                  <div className="space-y-1 font-playfair-display">
                                     <div className="font-semibold">
-                                      {subject} - {dateStr}
+                                      {subject} ➔ {dateStr.replace(/-/g, '/')}
                                     </div>
                                     <div className="text-sm">
                                       Total: {hours.toFixed(1)} hours
@@ -213,9 +289,9 @@ export default function HabitGrid({ sessions, settings }: HabitGridProps) {
                                     {daySessions.map((session, idx) => (
                                       <div
                                         key={idx}
-                                        className="text-xs text-muted-foreground"
+                                        className="text-xs text-foreground dark:text-blue-600"
                                       >
-                                        {session.goalTopic} ({session.hours}h)
+                                        {session.goalTopic} ({session.hours.toFixed(1)}h)
                                         {session.timeStart !== "00:00" && (
                                           <span className="ml-1">
                                             ({formatTime(session.timeStart, settings.timeFormat)} - {formatTime(session.timeEnd, settings.timeFormat)})
