@@ -186,13 +186,13 @@ function AppContent() {
                 className="flex items-center gap-2.5"
               >
                 <div
-                  className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center text-base cursor-pointer"
+                  className="w-8 h-8 rounded-xl bg-primary/30 flex items-center justify-center text-base cursor-pointer"
                   onClick={() => setCurrentTab("dashboard")}
                 >
                   {profileAvatar}
                 </div>
                 <div>
-                  <h1 className="text-lg font-bold tracking-tight leading-tight">FocusFlow</h1>
+                  <h1 className="text-lg font-bold tracking-tight leading-tight font-dancing-script">FocusFlow</h1>
                   {profileName && (
                     <p className="text-[10px] text-muted-foreground leading-tight">Hey, {profileName} 👋</p>
                   )}

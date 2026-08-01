@@ -126,6 +126,8 @@
   --app-font-sans: 'Inter', sans-serif;
   --app-font-serif: Georgia, serif;
   --app-font-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  --app-font-script: 'Dancing Script', cursive;
+  --app-font-script: 'Dancing Script', cursive;
   --radius: 0.75rem;
   --shadow-2xs: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
   --shadow-xs: 0px 1px 3px 0px rgba(0, 0, 0, 0.1);
@@ -264,6 +266,11 @@
     0px 20px 25px -5px rgba(0, 0, 0, 0.5),
     0px 10px 10px -5px rgba(0, 0, 0, 0.4);
   --shadow-2xl: 0px 25px 50px -12px rgba(0, 0, 0, 0.7);
+
+  --app-font-sans: 'Inter', sans-serif;
+  --app-font-serif: Georgia, serif;
+  --app-font-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+  --app-font-script: 'Dancing Script', cursive;
 }
 
 @layer base {
@@ -284,6 +291,10 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
+  }
+
+  .font-dancing-script {
+    font-family: 'Dancing Script', cursive;
   }
 }
 

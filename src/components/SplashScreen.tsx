@@ -31,7 +31,7 @@ export default function SplashScreen({ onDone }: { onDone: () => void }) {
           >
             <div className="relative">
               {/* Inner icon */}
-              <div className="w-32 h-32 flex items-center justify-center">
+              <div className="w-20 h-20 flex items-center justify-center">
                 <img src="/loadingScreen1.svg" alt="FocusFlow" className="w-full h-full" />
               </div>
             </div>
@@ -41,7 +41,7 @@ export default function SplashScreen({ onDone }: { onDone: () => void }) {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="text-3xl font-bold tracking-tight text-foreground"
+                className="text-4xl font-bold tracking-tight text-foreground font-dancing-script"
               >
                 FocusFlow
               </motion.h1>
@@ -49,7 +49,7 @@ export default function SplashScreen({ onDone }: { onDone: () => void }) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                className="text-sm text-muted-foreground mt-1"
+                className="text-base text-muted-foreground mt-1 font-dancing-script"
               >
                 Your personal study sanctuary
               </motion.p>
