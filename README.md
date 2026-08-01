@@ -1,93 +1,86 @@
-# FocusFlow - Study Habit Tracker
+# FocusFlow
 
-FocusFlow → Aesthetic Offline First Habit And Study Tracker. Pomodoro, Calendar, Streaks And Goals. Dark Navy And Grass Green. 100% Client Side.
+FocusFlow is an aesthetic offline first study habit tracker designed to help you stay consistent with your studies. It runs entirely in your browser, so there is no installation, no account creation, and no internet connection required after the first visit.
 
-A modern, browser-based study habit tracker built with React, TypeScript, and Tailwind CSS.
+## Open the App
+
+[https://focusflow7.netlify.app](https://focusflow7.netlify.app)
+
+For the best experience, bookmark the website in your browser and use it like a desktop application.
 
 ## Features
 
-- 📚 **Session Logging**: Track study sessions with subjects, time, topics, and remarks
-- 🎯 **Goals Management**: Set and track weekly study goals
-- 📅 **Calendar View**: Visual calendar showing study sessions
-- 🎲 **Habit Grid**: Streak-based habit tracking with gamification
-- ⏱️ **Pomodoro Timer**: Built-in Pomodoro timer for focused study sessions
-- ✅ **Task Management**: Track tasks with deadlines and status
-- 🔖 **Bookmarks**: Save and organize study resources
-- 🔍 **Search**: Search through sessions and data
-- 📊 **Statistics**: Visual insights into study patterns
-- 🎨 **Customization**: Custom subjects, tags, and themes
-- 💾 **Local Storage**: All data stored locally in browser
-- 📤 **Import/Export**: Backup and restore data
+1. Study Session Logging → Record study sessions with subjects, duration, topics, and remarks.
 
-## Tech Stack
+2. Goals Management → Set and track your weekly study goals.
 
-- **Framework**: React 18 with TypeScript
-- **Build Tool**: Vite
-- **Styling**: Tailwind CSS
-- **UI Components**: Radix UI
-- **Icons**: Lucide React
-- **Animations**: Framer Motion
-- **Date Handling**: date-fns, react-day-picker
-- **Charts**: Recharts
+3. Calendar View → View all your study sessions in an interactive calendar.
 
-## Deployment
+4. Habit Grid and Streaks → Build consistency with streak tracking and habit visualization.
 
-### Netlify Deployment
+5. Pomodoro Timer → Stay focused using the built in Pomodoro timer.
 
-1. Push this code to a Git repository (GitHub, GitLab, or Bitbucket)
-2. Connect your repository to Netlify
-3. Netlify will automatically detect the `netlify.toml` configuration
-4. The build command is: `pnpm run build`
-5. The publish directory is: `dist`
+6. Task Management → Organize tasks with deadlines and completion status.
 
-### Manual Deployment
+7. Bookmarks → Save important study resources and useful links.
 
-1. Install dependencies:
-   ```bash
-   pnpm install
-   ```
+8. Search → Quickly search through study sessions and saved data.
 
-2. Build the project:
-   ```bash
-   pnpm run build
-   ```
+9. Statistics → View insights into your study habits and progress.
 
-3. The optimized production files will be in the `dist` directory
-4. Upload the contents of `dist` to any static hosting service
+10. Customization → Personalize subjects, tags, and other settings.
 
-## Development
+11. Import and Export → Create backups of your data and restore them whenever needed.
 
-1. Install dependencies:
-   ```bash
-   pnpm install
-   ```
+## Getting Started
 
-2. Start development server:
-   ```bash
-   pnpm run dev
-   ```
+1. Open [https://focusflow7.netlify.app](https://focusflow7.netlify.app)
 
-3. The app will be available at `http://localhost:5173`
+2. Bookmark the page in your browser.
 
-## Scripts
+3. Start studying.
 
-- `pnpm run dev` - Start development server
-- `pnpm run build` - Build for production
-- `pnpm run preview` - Preview production build
-- `pnpm run typecheck` - Run TypeScript type checking
+No installation or setup is required.
 
 ## Data Storage
 
-All data is stored in the browser's localStorage, including:
-- Study sessions
-- Goals and targets
-- Tasks and deadlines
-- Bookmarks
-- Settings and preferences
-- Attachments (PDFs and links)
+1. All your data is stored locally in your browser.
 
-⚠️ **Important**: Clearing browser data will delete all saved data. Use the Import/Export feature to backup your data regularly.
+2. No data is uploaded to any server.
+
+3. No account is required.
+
+4. Your study history remains on your own device.
+
+5. Once the application has loaded, it can be used completely offline.
+
+## Important
+
+1. FocusFlow stores everything using your browser's local storage.
+
+2. If you clear your browser cache, site data, or browser storage, all saved data will be permanently deleted.
+
+3. Before clearing your browser or switching to another device, use the **Export Data** feature to save a backup as a `.json` file.
+
+4. You can restore all your data at any time by using the **Import Data** feature and selecting your exported `.json` file.
+
+5. Regular backups are recommended if your study data is important.
+
+## Privacy
+
+1. FocusFlow is a 100 percent client side application.
+
+2. Your data never leaves your device unless you choose to export it.
+
+3. No accounts.
+
+4. No cloud storage.
+
+5. No tracking.
+
+6. Your data stays with you.
 
 ## License
 
-This project is private and intended for personal use.
+This project is intended for personal use.
+
