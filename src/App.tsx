@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -15,16 +15,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useSessions, useGoals, useSettings, getLocalDateStr } from "@/hooks/useSessions";
 import SplashScreen from "@/components/SplashScreen";
 import SideMenu from "@/components/SideMenu";
-import Dashboard from "@/pages/Dashboard";
-import LogSession from "@/pages/LogSession";
-import CalendarView from "@/pages/CalendarView";
-import HabitGrid from "@/pages/HabitGrid";
-import GoalsRemarks from "@/pages/GoalsRemarks";
-import SessionsLog from "@/pages/SessionsLog";
-import Search from "@/pages/Search";
-import Pomodoro from "@/pages/Pomodoro";
-import Tasks from "@/pages/Tasks";
-import Bookmarks from "@/pages/Bookmarks";
 import {
   LayoutDashboard,
   PlusCircle,
@@ -41,6 +31,18 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
+
+// Lazy load pages for code splitting
+const Dashboard = lazy(() => import("@/pages/Dashboard"));
+const LogSession = lazy(() => import("@/pages/LogSession"));
+const CalendarView = lazy(() => import("@/pages/CalendarView"));
+const HabitGrid = lazy(() => import("@/pages/HabitGrid"));
+const GoalsRemarks = lazy(() => import("@/pages/GoalsRemarks"));
+const SessionsLog = lazy(() => import("@/pages/SessionsLog"));
+const Search = lazy(() => import("@/pages/Search"));
+const Pomodoro = lazy(() => import("@/pages/Pomodoro"));
+const Tasks = lazy(() => import("@/pages/Tasks"));
+const Bookmarks = lazy(() => import("@/pages/Bookmarks"));
 
 const queryClient = new QueryClient();
 
@@ -253,40 +255,42 @@ function AppContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.14 }}
           >
-            {currentTab === "dashboard" && (
-              <Dashboard sessions={sessions} weeklyGoalHours={settings.weeklyGoalHours} settings={settings} />
-            )}
-            {currentTab === "log" && (
-              <LogSession
-                onAddSession={addSession}
-                settings={settings}
-                onUpdateSettings={updateSettings}
-                weeklyGoalHours={settings.weeklyGoalHours}
-                currentWeekHours={weekStats}
-              />
-            )}
-            {currentTab === "sessions" && (
-              <SessionsLog
-                sessions={sessions}
-                onDelete={deleteSession}
-                onUpdate={updateSession}
-                settings={settings}
-              />
-            )}
-            {currentTab === "pomodoro" && <Pomodoro />}
-            {currentTab === "tasks" && <Tasks />}
-            {currentTab === "calendar" && <CalendarView sessions={sessions} settings={settings} />}
-            {currentTab === "habits" && <HabitGrid sessions={sessions} settings={settings} />}
-            {currentTab === "goals" && (
-              <GoalsRemarks
-                sessions={sessions}
-                goals={goals}
-                onAddGoal={addGoal}
-                onDeleteGoal={deleteGoal}
-              />
-            )}
-            {currentTab === "bookmarks" && <Bookmarks />}
-            {currentTab === "search" && <Search sessions={sessions} />}
+            <Suspense fallback={<div className="text-center py-20 text-muted-foreground">Loading...</div>}>
+              {currentTab === "dashboard" && (
+                <Dashboard sessions={sessions} weeklyGoalHours={settings.weeklyGoalHours} settings={settings} />
+              )}
+              {currentTab === "log" && (
+                <LogSession
+                  onAddSession={addSession}
+                  settings={settings}
+                  onUpdateSettings={updateSettings}
+                  weeklyGoalHours={settings.weeklyGoalHours}
+                  currentWeekHours={weekStats}
+                />
+              )}
+              {currentTab === "sessions" && (
+                <SessionsLog
+                  sessions={sessions}
+                  onDelete={deleteSession}
+                  onUpdate={updateSession}
+                  settings={settings}
+                />
+              )}
+              {currentTab === "pomodoro" && <Pomodoro />}
+              {currentTab === "tasks" && <Tasks />}
+              {currentTab === "calendar" && <CalendarView sessions={sessions} settings={settings} />}
+              {currentTab === "habits" && <HabitGrid sessions={sessions} settings={settings} />}
+              {currentTab === "goals" && (
+                <GoalsRemarks
+                  sessions={sessions}
+                  goals={goals}
+                  onAddGoal={addGoal}
+                  onDeleteGoal={deleteGoal}
+                />
+              )}
+              {currentTab === "bookmarks" && <Bookmarks />}
+              {currentTab === "search" && <Search sessions={sessions} />}
+            </Suspense>
           </motion.div>
         </main>
       </div>
