@@ -30,15 +30,9 @@ export default function SplashScreen({ onDone }: { onDone: () => void }) {
             className="flex flex-col items-center gap-4"
           >
             <div className="relative">
-              {/* Outer ring */}
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                className="w-24 h-24 rounded-full border-2 border-primary/20 border-t-primary absolute inset-0"
-              />
               {/* Inner icon */}
-              <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
-                <img src="/loadingScreen.svg" alt="FocusFlow" className="w-16 h-16" />
+              <div className="w-32 h-32 flex items-center justify-center">
+                <img src="/loadingScreen1.svg" alt="FocusFlow" className="w-full h-full" />
               </div>
             </div>
 
