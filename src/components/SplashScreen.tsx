@@ -38,7 +38,7 @@ export default function SplashScreen({ onDone }: { onDone: () => void }) {
               />
               {/* Inner icon */}
               <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
-                <span className="text-4xl">📚</span>
+                <img src="/favicon.svg" alt="FocusFlow" className="w-16 h-16" />
               </div>
             </div>
 

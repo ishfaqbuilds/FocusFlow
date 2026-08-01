@@ -181,7 +181,7 @@ export function useStats(sessions: Session[]) {
     );
     
     if (sortedDates.length === 0) {
-      return { todayHours, streak: 0, weekHours, monthCompletionRate };
+      return { todayHours, streak: 0, weekHours: 0, monthCompletionRate: 0 };
     }
     
     let streak = 0;
