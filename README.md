@@ -18,6 +18,6 @@ FocusFlow is an aesthetic offline-first study habit tracker designed to help you
 
 ## 🌐 Use the App
 
-Bookmark and enjoy FocusFlow at: **https://focusflow7.netlify.app/**
+Deploy FocusFlow to your preferred platform to start using it.
 
 *Note: All data is stored locally in your browser. Remember to export your data before clearing browser cache.*
